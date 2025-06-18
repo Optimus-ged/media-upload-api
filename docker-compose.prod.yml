@@ -1,0 +1,16 @@
+services:
+  api:
+    build: .
+    restart: always
+    environment:
+      VIRTUAL_HOST: finna-media.buy-one-store.com
+      LETSENCRYPT_HOST: finna-media.buy-one-store.com
+      LETSENCRYPT_EMAIL: gedeonyalakuhanda@gmail.com
+    networks:
+      - nginx-network
+    ports:
+      - '3001:3000'
+
+networks:
+  nginx-network:
+    external: true
