@@ -13,11 +13,11 @@ services:
     ports:
       - '3001:3000'
     volumes:
-      - media-volume:/app/uploads/images
+      - finna-media-volume:/app/uploads/images
 
 networks:
   nginx-network:
     external: true
 
 volumes:
-  media-volume:
+  finna-media-volume:
