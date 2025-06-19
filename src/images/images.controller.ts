@@ -64,7 +64,7 @@ export class ImagesController {
       return {
         message: 'Image saved as JPEG',
         filename: jpegFilename,
-        url: `/uploads/images/${jpegFilename}`,
+        url: `https://finna-media.buy-one-store.com/v1/uploads/images/${jpegFilename}`,
       };
     } catch (error) {
       return {
