@@ -2,6 +2,7 @@ services:
   api:
     build: .
     restart: always
+    dockerfile: Dockerfile.prod
     environment:
       VIRTUAL_HOST: finna-media.buy-one-store.com
       LETSENCRYPT_HOST: finna-media.buy-one-store.com
