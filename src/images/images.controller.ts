@@ -12,10 +12,30 @@ import { extname, join } from 'path';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as sharp from 'sharp';
+import { ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
 
 @Controller('images')
 export class ImagesController {
   @Post()
+  @ApiOperation({
+    summary: 'Upload an image file to the backend',
+    description:
+      'Only JPEG, JPG, and PNG files are allowed. Maximum size: 1 GB.',
+  })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Image upload form',
+    required: true,
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -46,7 +66,7 @@ export class ImagesController {
       },
     }),
   )
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+  async uploadFile(@UploadedFile('file') file: Express.Multer.File) {
     const originalPath = file.path;
     const originalExt = extname(originalPath).toLowerCase();
     const jpegFilename = `${Date.now()}.jpg`;
@@ -71,6 +91,9 @@ export class ImagesController {
     }
   }
 
+  @ApiOperation({
+    summary: 'This API displays a list of all the image files',
+  })
   @Get()
   getAllImages() {
     const folderPath = path.join(__dirname, '..', '..', 'uploads', 'images');

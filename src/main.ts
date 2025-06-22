@@ -19,13 +19,16 @@ async function bootstrap() {
       'access-token',
     )
     .addSecurityRequirements('access-token')
-    .addServer('http://localhost:3000/v1', 'Local development server')
-    .addServer('https://finna-media.buy-one-store.com/v1', 'Production server')
+    .addServer('http://localhost:3000/v1/uploads', 'Local development server')
+    .addServer(
+      'https://finna-media.buy-one-store.com/v1/uploads',
+      'Production server',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('v1/api-docs', app, document);
-  app.setGlobalPrefix("v1/uploads")
+  app.setGlobalPrefix('v1/uploads');
   await app.listen(3000);
 }
 bootstrap();
