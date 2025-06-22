@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Controller,
+  Get,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -61,12 +62,32 @@ export class ImagesController {
         fs.unlinkSync(originalPath);
       }
 
-      return {
-        url: `https://finna-media.buy-one-store.com/v1/uploads/images/${jpegFilename}`,
-      };
+      return { imgName: jpegFilename };
     } catch (error) {
       return {
         message: 'Error processing image',
+        error: error.message,
+      };
+    }
+  }
+
+  @Get()
+  getAllImages() {
+    const folderPath = path.join(__dirname, '..', '..', 'uploads', 'images');
+
+    try {
+      const files = fs.readdirSync(folderPath);
+
+      // Optional: filter image extensions
+      const imageFiles = files.filter((file) =>
+        /\.(jpg|jpeg|png)$/i.test(file),
+      );
+
+      // Return just names, or build full URLs if you serve them statically
+      return imageFiles;
+    } catch (error) {
+      return {
+        message: 'Error reading image directory',
         error: error.message,
       };
     }
