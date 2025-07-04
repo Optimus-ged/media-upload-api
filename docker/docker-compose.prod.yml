@@ -22,4 +22,3 @@ networks:
 
 volumes:
   finna-media-volume:
-f
