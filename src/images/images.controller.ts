@@ -2,6 +2,8 @@ import {
   BadRequestException,
   Controller,
   Get,
+  InternalServerErrorException,
+  Logger,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -16,6 +18,8 @@ import { ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
 
 @Controller('images')
 export class ImagesController {
+  private readonly logger = new Logger(ImagesController.name);
+
   @Post()
   @ApiOperation({
     summary: 'Upload an image file to the backend',
@@ -56,6 +60,9 @@ export class ImagesController {
         if (allowedTypes.test(ext) && allowedTypes.test(mimetype)) {
           cb(null, true);
         } else {
+          console.warn(
+            `Rejected file: ${file.originalname}, ext: ${ext}, mimetype: ${mimetype}`,
+          );
           cb(
             new BadRequestException(
               'Only JPEG, JPG, and PNG files are allowed!',
@@ -75,19 +82,19 @@ export class ImagesController {
     try {
       if (originalExt !== '.jpeg') {
         await sharp(originalPath).jpeg().toFile(jpegPath);
-      }
+      } else {
+        fs.copyFileSync(originalPath, jpegPath);
 
-      // Always remove the original file
-      if (fs.existsSync(originalPath)) {
-        fs.unlinkSync(originalPath);
+        // Always remove the original file
+        if (fs.existsSync(originalPath)) {
+          fs.unlinkSync(originalPath);
+        }
       }
 
       return { imgName: jpegFilename };
     } catch (error) {
-      return {
-        message: 'Error processing image',
-        error: error.message,
-      };
+      this.logger.error(error);
+      throw new InternalServerErrorException(error);
     }
   }
 
