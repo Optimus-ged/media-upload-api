@@ -80,12 +80,10 @@ export class ImagesController {
     const jpegPath = join('./uploads/images', jpegFilename);
 
     try {
-      if (originalExt !== '.jpeg') {
-        await sharp(originalPath).jpeg().toFile(jpegPath);
-      } else {
-        fs.copyFileSync(originalPath, jpegPath);
-      }
+      // Always convert to .jpg using sharp
+      await sharp(originalPath).jpeg().toFile(jpegPath);
 
+      // Always remove the original file
       if (fs.existsSync(originalPath)) {
         fs.unlinkSync(originalPath);
       }
