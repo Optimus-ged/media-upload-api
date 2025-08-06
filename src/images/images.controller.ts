@@ -84,11 +84,10 @@ export class ImagesController {
         await sharp(originalPath).jpeg().toFile(jpegPath);
       } else {
         fs.copyFileSync(originalPath, jpegPath);
+      }
 
-        // Always remove the original file
-        if (fs.existsSync(originalPath)) {
-          fs.unlinkSync(originalPath);
-        }
+      if (fs.existsSync(originalPath)) {
+        fs.unlinkSync(originalPath);
       }
 
       return { imgName: jpegFilename };
