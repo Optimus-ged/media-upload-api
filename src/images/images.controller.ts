@@ -75,7 +75,7 @@ export class ImagesController {
   )
   async uploadFile(@UploadedFile('file') file: Express.Multer.File) {
     const originalPath = file.path;
-    const originalExt = extname(originalPath).toLowerCase();
+    // const originalExt = extname(originalPath).toLowerCase();
     const jpegFilename = `${Date.now()}.jpg`;
     const jpegPath = join('./uploads/images', jpegFilename);
 
