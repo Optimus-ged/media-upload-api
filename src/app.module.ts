@@ -13,7 +13,7 @@ import { ImagesModule } from './images/images.module';
         useGlobalPrefix: true,
       },
       {
-        rootPath: join(__dirname, '..', '', 'documents'),
+        rootPath: join(__dirname, '..', 'uploads', 'documents'),
         serveRoot: '/documents',
         useGlobalPrefix: true,
       },
